@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hepatitis C Prediction Prediction</title>
+    <meta name="description" content="Advanced AI diagnostics with precision for Hepatitis C">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: skewX(-20deg);
+            animation: shine 8s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            20% {
+                left: 200%;
+            }
+
+            100% {
+                left: 200%;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .input-group input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .input-group input:focus+label {
+            color: var(--primary);
+        }
+
+        .action-container {
+            text-align: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .result-container.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .result-box {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--success);
+            color: var(--success);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
+        }
+
+        .result-box.error {
+            border-color: var(--error);
+            color: var(--error);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .loader {
+            display: none;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Hepatitis C Prediction</h1>
+            <p>Advanced AI diagnostics with precision</p>
+        </header>
+
+        <form id="predictionForm">
+            <div class="features-grid">
+                <!-- Features: 'Age','AST','CHE','ALT','ALP','ALB','BIL','GGT' -->
+                <div class="input-group">
+                    <label>Age</label>
+                    <input type="number" step="any" name="Age" required placeholder="e.g. 45">
+                </div>
+                <div class="input-group">
+                    <label>AST (Aspartate Aminotransferase)</label>
+                    <input type="number" step="any" name="AST" required placeholder="e.g. 35.5">
+                </div>
+                <div class="input-group">
+                    <label>CHE (Cholinesterase)</label>
+                    <input type="number" step="any" name="CHE" required placeholder="e.g. 8.2">
+                </div>
+                <div class="input-group">
+                    <label>ALT (Alanine Aminotransferase)</label>
+                    <input type="number" step="any" name="ALT" required placeholder="e.g. 24.1">
+                </div>
+                <div class="input-group">
+                    <label>ALP (Alkaline Phosphatase)</label>
+                    <input type="number" step="any" name="ALP" required placeholder="e.g. 68.0">
+                </div>
+                <div class="input-group">
+                    <label>ALB (Albumin)</label>
+                    <input type="number" step="any" name="ALB" required placeholder="e.g. 42.1">
+                </div>
+                <div class="input-group">
+                    <label>BIL (Bilirubin)</label>
+                    <input type="number" step="any" name="BIL" required placeholder="e.g. 10.5">
+                </div>
+                <div class="input-group">
+                    <label>GGT (Gamma-Glutamyl Transferase)</label>
+                    <input type="number" step="any" name="GGT" required placeholder="e.g. 21.0">
+                </div>
+            </div>
+
+            <div class="action-container">
+                <button type="submit" id="predictBtn">
+                    <span id="btnText">Analyze Patient Data</span>
+                    <div class="loader" id="btnLoader"></div>
+                </button>
+            </div>
+        </form>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-box" id="resultBox">
+                Prediction Result
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById('predictBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const resultContainer = document.getElementById('resultContainer');
+            const resultBox = document.getElementById('resultBox');
+
+            // UI Loading state
+            btn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'block';
+            resultContainer.classList.remove('show');
+
+            const formData = new FormData(e.target);
+
+            try {
+                // Add artificial delay to show loader animation beautifully (Optional but feels premium)
+                await new Promise(r => setTimeout(r, 600));
+
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultBox.className = 'result-box';
+                    resultBox.innerHTML = `Diagnosis: <span>${data.prediction}</span>`;
+                } else {
+                    resultBox.className = 'result-box error';
+                    resultBox.textContent = `Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultBox.className = 'result-box error';
+                resultBox.textContent = `Error: Could not connect to server.`;
+            } finally {
+                // UI Restore state
+                btn.disabled = false;
+                btnText.style.display = 'block';
+                btnLoader.style.display = 'none';
+                resultContainer.classList.add('show');
+            }
+        });
+    </script>
+</body>
+
+</html>
